@@ -443,24 +443,25 @@ function exportTableToCSV(tbodyId, filename) {
     const thRows = Array.from(headerRows);
     const numCols = table.querySelector('tbody tr') ? table.querySelector('tbody tr').children.length : 0;
     const grid = Array.from({ length: thRows.length }, () => new Array(numCols).fill(''));
+    const occupied = Array.from({ length: thRows.length }, () => new Array(numCols).fill(false));
     thRows.forEach((tr, ri) => {
       let ci = 0;
       tr.querySelectorAll('th').forEach(th => {
-        while (grid[ri][ci]) ci++;
+        while (occupied[ri][ci]) ci++;
         const cs = parseInt(th.getAttribute('colspan')) || 1;
         const rs = parseInt(th.getAttribute('rowspan')) || 1;
         const txt = th.textContent.trim();
         for (let r = 0; r < rs; r++) for (let c = 0; c < cs; c++) {
-          if (grid[ri + r]) grid[ri + r][ci + c] = (r === 0 && c === 0) ? txt : '';
+          if (grid[ri + r]) { grid[ri + r][ci + c] = txt; occupied[ri + r][ci + c] = true; }
         }
         ci += cs;
       });
     });
-    // Merge: for each column, join non-empty cells from top to bottom
+    // Merge: for each column, join unique consecutive cells from top to bottom
     const merged = [];
     for (let c = 0; c < numCols; c++) {
       const parts = [];
-      for (let r = 0; r < grid.length; r++) { if (grid[r][c]) parts.push(grid[r][c]); }
+      for (let r = 0; r < grid.length; r++) { if (grid[r][c] && grid[r][c] !== parts[parts.length - 1]) parts.push(grid[r][c]); }
       merged.push('"' + parts.join(' - ').replace(/"/g, '""') + '"');
     }
     rows.push(merged.join(','));
