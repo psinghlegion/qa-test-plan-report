@@ -37,10 +37,43 @@
       background: linear-gradient(135deg, #1e3a5f 0%, #1a56db 100%);
       color: white; padding: 24px 32px; box-shadow: var(--shadow-md);
     }
+    .header-top { display: flex; justify-content: space-between; align-items: flex-start; }
     .header h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
     .header .subtitle { font-size: 14px; opacity: 0.8; }
     .header .repo-link { color: #93c5fd; text-decoration: none; }
     .header .repo-link:hover { text-decoration: underline; }
+    .header .refresh-info { font-size: 12px; opacity: 0.6; margin-top: 4px; }
+    .header-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+    .refresh-btn {
+      padding: 6px 14px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 6px; font-size: 13px; font-weight: 500; color: white; cursor: pointer;
+      transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .refresh-btn:hover { background: rgba(255,255,255,0.25); }
+    .refresh-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .settings-btn {
+      padding: 6px 10px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 6px; color: white; cursor: pointer; transition: all 0.15s; font-size: 16px; line-height: 1;
+    }
+    .settings-btn:hover { background: rgba(255,255,255,0.25); }
+    .token-panel {
+      display: none; margin-top: 12px; padding: 12px 16px; background: rgba(0,0,0,0.2);
+      border-radius: 6px; font-size: 13px;
+    }
+    .token-panel.visible { display: block; }
+    .token-panel label { display: block; margin-bottom: 6px; opacity: 0.9; }
+    .token-panel .token-row { display: flex; gap: 8px; }
+    .token-panel input {
+      flex: 1; padding: 6px 10px; border: 1px solid rgba(255,255,255,0.3); border-radius: 4px;
+      background: rgba(255,255,255,0.1); color: white; font-size: 13px; font-family: monospace;
+    }
+    .token-panel input::placeholder { color: rgba(255,255,255,0.4); }
+    .token-panel button {
+      padding: 6px 12px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 4px; color: white; cursor: pointer; font-size: 12px;
+    }
+    .token-panel button:hover { background: rgba(255,255,255,0.3); }
+    .token-panel .hint { margin-top: 6px; font-size: 11px; opacity: 0.5; }
     .container { max-width: 1440px; margin: 0 auto; padding: 24px 32px; }
     .filters {
       display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px;
@@ -74,8 +107,8 @@
     .card.regression { border-left-color: var(--danger); }
     .card.total { border-left-color: var(--gray-700); }
     .card.scenarios { border-left-color: var(--success); }
-    .card.pr-yes { border-left-color: #16a34a; }
-    .card.pr-no { border-left-color: #dc2626; }
+    .card.pr-open { border-left-color: #16a34a; }
+    .card.pr-merged { border-left-color: #8b5cf6; }
     .card .card-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-500); margin-bottom: 8px; }
     .card .card-value { font-size: 32px; font-weight: 700; color: var(--gray-900); }
     .card .card-sub { font-size: 12px; color: var(--gray-400); margin-top: 4px; }
@@ -97,7 +130,7 @@
     tbody tr:hover { background: var(--gray-50); }
     tbody tr:last-child td { border-bottom: none; }
     .status-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
-    .status-merged { background: #dbeafe; color: #1e40af; }
+    .status-merged { background: #ede9fe; color: #5b21b6; }
     .status-open { background: #dcfce7; color: #166534; }
     .skill-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
     .skill-feature { background: #ede9fe; color: #5b21b6; }
@@ -105,8 +138,6 @@
     .skill-delta { background: #fef3c7; color: #92400e; }
     .skill-regression { background: #fee2e2; color: #991b1b; }
     .team-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; background: var(--gray-100); color: var(--gray-700); }
-    .pr-yes-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; background: #dcfce7; color: #166534; }
-    .pr-no-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; background: #fee2e2; color: #991b1b; }
     .pr-link { color: var(--primary); text-decoration: none; font-weight: 500; }
     .pr-link:hover { text-decoration: underline; }
     .confluence-link { color: var(--primary); text-decoration: none; font-size: 13px; }
@@ -136,8 +167,6 @@
     .bar-fill.genai { background: #0284c7; }
     .bar-fill.lp { background: #4f46e5; }
     .bar-fill.ops { background: #65a30d; }
-    .bar-fill.pr-yes { background: #16a34a; }
-    .bar-fill.pr-no { background: #dc2626; }
     .bar-value { font-size: 13px; font-weight: 600; color: var(--gray-700); width: 30px; flex-shrink: 0; }
     .donut-wrapper { display: flex; align-items: center; gap: 24px; }
     .donut-svg { width: 140px; height: 140px; }
@@ -149,10 +178,9 @@
     .matrix-table thead tr:first-child th { border-bottom: none; }
     .matrix-table thead tr:first-child th:not(:first-child) { background: var(--gray-100); }
     .matrix-table tbody tr:last-child { font-weight: 700; background: var(--gray-50); }
-    .pr-cell-yes { color: #166534; font-weight: 600; }
-    .pr-cell-no { color: #991b1b; font-weight: 600; }
+    .pr-cell-open { color: #166534; font-weight: 600; }
+    .pr-cell-merged { color: #5b21b6; font-weight: 600; }
     .pr-cell-na { color: var(--gray-400); }
-    .pr-cell-partial { color: #92400e; font-weight: 600; }
     .export-btn {
       padding: 6px 14px; background: white; border: 1px solid var(--gray-300);
       border-radius: 6px; font-size: 12px; font-weight: 500; color: var(--gray-600);
@@ -161,6 +189,9 @@
     .export-btn:hover { background: var(--gray-50); color: var(--gray-800); border-color: var(--gray-400); }
     .export-btn svg { width: 14px; height: 14px; }
     .timestamp { text-align: center; padding: 16px; color: var(--gray-400); font-size: 12px; }
+    .loading { text-align: center; padding: 60px; color: var(--gray-400); font-size: 16px; }
+    .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 6px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
     @media (max-width: 768px) {
       .container { padding: 16px; }
       .charts-row { grid-template-columns: 1fr; }
@@ -172,15 +203,35 @@
 <body>
 
 <div class="header">
-  <h1>QA Test Plan Generation Report</h1>
-  <div class="subtitle">
-    Repository: <a class="repo-link" href="https://github.com/legionco/qa-test-plan" target="_blank">legionco/qa-test-plan</a>
-    &nbsp;&middot;&nbsp; Source: Confluence (TEST space) + GitHub PRs
-    &nbsp;&middot;&nbsp; Generated: <span id="timestamp"></span>
+  <div class="header-top">
+    <div>
+      <h1>QA Test Plan Generation Report</h1>
+      <div class="subtitle">
+        Repository: <a class="repo-link" href="https://github.com/legionco/qa-test-plan" target="_blank">legionco/qa-test-plan</a>
+        &nbsp;&middot;&nbsp; Source: <a class="repo-link" href="https://github.com/legionco/qa-test-plan/pulls" target="_blank">GitHub PRs (live)</a>
+      </div>
+      <div class="refresh-info">Last fetched: <span id="refreshedAt">--</span> &nbsp;&middot;&nbsp; <span id="prCountInfo"></span></div>
+    </div>
+    <div class="header-actions">
+      <button class="refresh-btn" id="refreshBtn" onclick="loadData()"><span id="refreshLabel">Refresh</span></button>
+      <button class="settings-btn" onclick="toggleToken()" title="GitHub token settings">&#9881;</button>
+    </div>
+  </div>
+  <div class="token-panel" id="tokenPanel">
+    <label>GitHub Personal Access Token (required for private repos)</label>
+    <div class="token-row">
+      <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" />
+      <button onclick="saveToken()">Save</button>
+      <button onclick="clearToken()">Clear</button>
+    </div>
+    <div class="hint">Token is stored in your browser's localStorage only. Needs <code>repo</code> scope for private repos.</div>
   </div>
 </div>
 
 <div class="container">
+
+  <div id="loadingMsg" class="loading">Fetching PRs from GitHub...</div>
+  <div id="dashboardContent" style="display:none;">
 
   <!-- Filters -->
   <div class="filters">
@@ -199,20 +250,12 @@
       <select id="filterTeam"><option value="all">All Teams</option></select>
     </div>
     <div class="filter-group">
-      <label>Owner (Confluence)</label>
+      <label>Owner</label>
       <select id="filterOwner"><option value="all">All Owners</option></select>
     </div>
     <div class="filter-group">
-      <label>PR Created</label>
-      <select id="filterPR">
-        <option value="all">All</option>
-        <option value="yes">Yes</option>
-        <option value="no">No</option>
-      </select>
-    </div>
-    <div class="filter-group">
       <label>PR Status</label>
-      <select id="filterPRStatus">
+      <select id="filterStatus">
         <option value="all">All</option>
         <option value="Open">Open</option>
         <option value="Merged">Merged</option>
@@ -227,7 +270,7 @@
   <!-- Summary Cards -->
   <div class="summary-cards">
     <div class="card total">
-      <div class="card-label">Total Plans</div>
+      <div class="card-label">Total PRs</div>
       <div class="card-value" id="totalPlans">0</div>
       <div class="card-sub" id="totalSub"></div>
     </div>
@@ -256,34 +299,34 @@
       <div class="card-value" id="scenarioCount">0</div>
       <div class="card-sub" id="scenarioSub"></div>
     </div>
-    <div class="card pr-yes">
-      <div class="card-label">PR Created</div>
-      <div class="card-value" id="prYesCount">0</div>
-      <div class="card-sub" id="prYesSub"></div>
+    <div class="card pr-open">
+      <div class="card-label">Open PRs</div>
+      <div class="card-value" id="openCount">0</div>
+      <div class="card-sub" id="openSub"></div>
     </div>
-    <div class="card pr-no">
-      <div class="card-label">No PR</div>
-      <div class="card-value" id="prNoCount">0</div>
-      <div class="card-sub" id="prNoSub"></div>
+    <div class="card pr-merged">
+      <div class="card-label">Merged PRs</div>
+      <div class="card-value" id="mergedCount">0</div>
+      <div class="card-sub" id="mergedSub"></div>
     </div>
   </div>
 
   <!-- Charts -->
   <div class="charts-row">
     <div class="chart-container">
-      <h3>Plans by Skill Type</h3>
+      <h3>PRs by Skill Type</h3>
       <div id="skillChart" class="bar-chart"></div>
     </div>
     <div class="chart-container">
-      <h3>Plans by Team</h3>
+      <h3>PRs by Team</h3>
       <div id="teamChart" class="bar-chart"></div>
     </div>
   </div>
 
   <div class="charts-row">
     <div class="chart-container">
-      <h3>PR Coverage</h3>
-      <div id="prDonut" class="donut-wrapper"></div>
+      <h3>PR Status</h3>
+      <div id="statusDonut" class="donut-wrapper"></div>
     </div>
     <div class="chart-container">
       <h3>Scenarios by Team</h3>
@@ -293,7 +336,7 @@
 
   <!-- Team vs Skill Matrix -->
   <div class="section">
-    <div class="section-header"><h2>Team vs Skill Matrix</h2><button class="export-btn" onclick="exportTableToCSV('matrixTable','team_skill_matrix.csv')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Export CSV</button></div>
+    <div class="section-header"><h2>Team vs Skill Matrix</h2><button class="export-btn" onclick="exportTableToCSV('matrixTable','team_skill_matrix.csv')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>CSV</button></div>
     <div style="overflow-x:auto;">
     <table class="matrix-table">
       <thead>
@@ -305,10 +348,10 @@
           <th colspan="2">/qa-regression</th>
         </tr>
         <tr>
-          <th>Total# Plans</th><th>PR Created?</th>
-          <th>Total# Plans</th><th>PR Created?</th>
-          <th>Total# Plans</th><th>PR Created?</th>
-          <th>Total# Plans</th><th>PR Created?</th>
+          <th>PRs</th><th>Status</th>
+          <th>PRs</th><th>Status</th>
+          <th>PRs</th><th>Status</th>
+          <th>PRs</th><th>Status</th>
         </tr>
       </thead>
       <tbody id="matrixTable"></tbody>
@@ -318,128 +361,320 @@
 
   <!-- Skill Breakdown -->
   <div class="section">
-    <div class="section-header"><h2>Skill Type Breakdown</h2><button class="export-btn" onclick="exportTableToCSV('skillTable','skill_type_breakdown.csv')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Export CSV</button></div>
+    <div class="section-header"><h2>Skill Type Breakdown</h2><button class="export-btn" onclick="exportTableToCSV('skillTable','skill_breakdown.csv')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>CSV</button></div>
     <table>
-      <thead><tr><th>Skill</th><th>Plans</th><th>%</th><th>Scenarios</th><th>PR Yes</th><th>PR No</th></tr></thead>
+      <thead><tr><th>Skill</th><th>PRs</th><th>%</th><th>Scenarios</th><th>Open</th><th>Merged</th></tr></thead>
       <tbody id="skillTable"></tbody>
     </table>
   </div>
 
   <!-- Team Breakdown -->
   <div class="section">
-    <div class="section-header"><h2>Team Breakdown</h2><button class="export-btn" onclick="exportTableToCSV('teamTable','team_breakdown.csv')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Export CSV</button></div>
+    <div class="section-header"><h2>Team Breakdown</h2><button class="export-btn" onclick="exportTableToCSV('teamTable','team_breakdown.csv')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>CSV</button></div>
     <table>
-      <thead><tr><th>Team</th><th>Plans</th><th>Scenarios</th><th>PR Yes</th><th>PR No</th></tr></thead>
+      <thead><tr><th>Team</th><th>PRs</th><th>Scenarios</th><th>Open</th><th>Merged</th></tr></thead>
       <tbody id="teamTable"></tbody>
     </table>
   </div>
 
   <!-- Owner Breakdown -->
   <div class="section">
-    <div class="section-header"><h2>Owner Breakdown</h2><button class="export-btn" onclick="exportTableToCSV('ownerTable','owner_breakdown.csv')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Export CSV</button></div>
+    <div class="section-header"><h2>Owner Breakdown</h2><button class="export-btn" onclick="exportTableToCSV('ownerTable','owner_breakdown.csv')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>CSV</button></div>
     <table>
-      <thead><tr><th>Owner</th><th>Plans</th><th>Teams</th><th>Scenarios</th><th>PR Yes</th><th>PR No</th></tr></thead>
+      <thead><tr><th>Owner</th><th>PRs</th><th>Teams</th><th>Scenarios</th><th>Open</th><th>Merged</th></tr></thead>
       <tbody id="ownerTable"></tbody>
     </table>
   </div>
 
-  <!-- PR Coverage by Skill -->
+  <!-- Status by Skill -->
   <div class="section">
-    <div class="section-header"><h2>PR Coverage Summary</h2><button class="export-btn" onclick="exportTableToCSV('prCoverageTable','pr_coverage_summary.csv')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Export CSV</button></div>
+    <div class="section-header"><h2>Status Summary by Skill</h2><button class="export-btn" onclick="exportTableToCSV('statusTable','status_summary.csv')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>CSV</button></div>
     <table>
-      <thead><tr><th>Skill</th><th>Total Pages</th><th>PR Created (Yes)</th><th>PR Not Created (No)</th><th>% with PR</th></tr></thead>
-      <tbody id="prCoverageTable"></tbody>
+      <thead><tr><th>Skill</th><th>Total PRs</th><th>Open</th><th>Merged</th><th>% Merged</th></tr></thead>
+      <tbody id="statusTable"></tbody>
     </table>
   </div>
 
   <!-- Detailed Table -->
   <div class="section">
     <div class="section-header">
-      <h2>All Test Plans -- Detailed View</h2>
+      <h2>All Test Plan PRs -- Detailed View</h2>
       <div style="display:flex;align-items:center;gap:12px;">
         <span class="badge" id="filteredCount" style="background: var(--primary-light); color: var(--primary);"></span>
-        <button class="export-btn" onclick="exportTableToCSV('mainTable','all_test_plans.csv')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Export CSV</button>
+        <button class="export-btn" onclick="exportTableToCSV('mainTable','all_test_plans.csv')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>CSV</button>
       </div>
     </div>
     <div style="overflow-x: auto;">
     <table>
       <thead>
         <tr>
-          <th>#</th>
-          <th>Page Title</th>
+          <th>PR #</th>
+          <th>Title</th>
           <th>Skill</th>
           <th>Team</th>
           <th>Module</th>
           <th>Owner</th>
           <th>Scenarios</th>
-          <th>PR Created</th>
-          <th>PR #</th>
-          <th>PR Status</th>
+          <th>Status</th>
           <th>Last Modified</th>
-          <th>Confluence</th>
+          <th>Links</th>
         </tr>
       </thead>
       <tbody id="mainTable"></tbody>
     </table>
     </div>
-    <div class="no-data" id="noData" style="display:none;">No plans match the selected filters.</div>
+    <div class="no-data" id="noData" style="display:none;">No PRs match the selected filters.</div>
   </div>
 
   <div class="timestamp">
-    Report generated on <span id="footerTimestamp"></span> &middot; Data from Confluence (TEST space) + GitHub PRs
+    Live data from <a href="https://github.com/legionco/qa-test-plan/pulls" target="_blank">legionco/qa-test-plan</a> &middot; Last fetched: <span id="footerTimestamp">--</span>
   </div>
+
+  </div><!-- /dashboardContent -->
 </div>
 
 <script>
-const DATA = [
-  // /qa-backlog
-  { id:1, title:"ELM -- Roster -- Backlog Test Coverage Manifest", skill:"backlog", team:"ELM", module:"Roster", owner:"Priya Singh", scenarios:116, scenNew:39, scenExisting:77, prCreated:"Yes", prNum:"#7", prStatus:"Open", lastModified:"Jun 18, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4824694845" },
-  { id:2, title:"Terminated and Rehired user profile", skill:"backlog", team:"ELM", module:"Terminated & Rehired", owner:"Priya Singh", scenarios:13, scenNew:9, scenExisting:4, prCreated:"Yes", prNum:"#6", prStatus:"Open", lastModified:"Jun 12, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4810145811" },
-  { id:3, title:"ELM -- Effective Dated API -- Backlog Test Coverage Manifest", skill:"backlog", team:"ELM", module:"Effective Dated API", owner:"Priya Singh", scenarios:66, scenNew:47, scenExisting:19, prCreated:"Yes", prNum:"#5", prStatus:"Open", lastModified:"Jun 12, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4807950338" },
-  { id:4, title:"Badges", skill:"backlog", team:"ELM", module:"Badges", owner:"Priya Singh", scenarios:56, scenNew:28, scenExisting:28, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 09, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4809293869" },
-  { id:5, title:"Differential Pay", skill:"backlog", team:"TA", module:"Differential Pay", owner:"Gunjan Anand", scenarios:71, scenNew:15, scenExisting:56, prCreated:"Yes", prNum:"#4", prStatus:"Open", lastModified:"May 31, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4784259115" },
-  { id:6, title:"Weekly Rest Evaluation", skill:"backlog", team:"SCH", module:"Weekly Rest Evaluation", owner:"Gunjan Anand", scenarios:32, scenNew:32, scenExisting:0, prCreated:"Yes", prNum:"#3", prStatus:"Merged", lastModified:"May 25, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4770857005" },
-  { id:7, title:"Flex Group", skill:"backlog", team:"SCH", module:"Flex Group", owner:"Gunjan Anand", scenarios:126, scenNew:5, scenExisting:121, prCreated:"Yes", prNum:"#1, #2", prStatus:"#1 Merged, #2 Open", lastModified:"May 25, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4769284144" },
-  { id:8, title:"Locations V2 API", skill:"backlog", team:"PLT-Int", module:"Locations V2 API", owner:"Gunjan Anand", scenarios:0, scenNew:0, scenExisting:0, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 16, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4800774168" },
-  { id:9, title:"Impersonation", skill:"backlog", team:"PLT-Core", module:"Impersonation", owner:"Gunjan Anand", scenarios:0, scenNew:0, scenExisting:0, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 09, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4785307676" },
-  { id:10, title:"Data Extracts", skill:"backlog", team:"PLT-Core", module:"Data Extracts", owner:"Gunjan Anand", scenarios:243, scenNew:243, scenExisting:0, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 10, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4812505093" },
-  { id:11, title:"Localize", skill:"backlog", team:"PLT-Core", module:"Localize", owner:"Gunjan Anand", scenarios:108, scenNew:108, scenExisting:0, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 17, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4831117361" },
-  { id:12, title:"PLT-Int - Employee Attribute Extracts Backlog Manifest", skill:"backlog", team:"PLT-Int", module:"Employee Attribute Extracts", owner:"Andy Zhang", scenarios:13, scenNew:13, scenExisting:0, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 08, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4806115335" },
-  { id:13, title:"PLT-Int - Location Attribute Backlog Manifest", skill:"backlog", team:"PLT-Int", module:"Location Attribute", owner:"Andy Zhang", scenarios:8, scenNew:8, scenExisting:0, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 05, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4801003521" },
-  { id:14, title:"PLT-Int - Extracts and Reports Backlog Manifest", skill:"backlog", team:"PLT-Int", module:"Extracts and Reports", owner:"Andy Zhang", scenarios:0, scenNew:0, scenExisting:0, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 05, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4799463468" },
-  // /qa-feature
-  { id:15, title:"PLT-14604 -- Expression Validation Framework", skill:"feature", team:"PLT-Core", module:"Expression Validation", owner:"Gunjan Anand", scenarios:43, scenNew:43, scenExisting:0, prCreated:"Yes", prNum:"#8", prStatus:"Merged", lastModified:"Jun 24, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4785307649" },
-  { id:16, title:"PLT-14604 -- Expression Validation Framework (Rebuild)", skill:"feature", team:"PLT-Core", module:"Expression Validation", owner:"Vikas Thorat", scenarios:43, scenNew:43, scenExisting:0, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 29, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4857692167" },
-  { id:17, title:"SCH-20561 -- VCA - ER Multi-Week Scheduling", skill:"feature", team:"SCH", module:"Multi-Week Scheduling", owner:"Santhosh Kumar K", scenarios:111, scenNew:111, scenExisting:0, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 04, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4799725586" },
-  { id:18, title:"SCH-21821 - Schedule Shifts to the Minute", skill:"feature", team:"SCH", module:"Minute-Level Scheduling", owner:"Mary Mao", scenarios:66, scenNew:66, scenExisting:0, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 30, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4845895701" },
-  { id:19, title:"SCH-22841 - Weekly Rest per Four Weeks", skill:"feature", team:"SCH", module:"Weekly Rest 4-Week", owner:"Mary Mao", scenarios:18, scenNew:18, scenExisting:0, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 14, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4801789962" },
-  { id:20, title:"SCH-22841 - Weekly Rest per Four Weeks (Post-Code Refresh)", skill:"feature", team:"SCH", module:"Weekly Rest 4-Week", owner:"Stoneman Huang", scenarios:0, scenNew:0, scenExisting:0, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 14, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4823973893" },
-  { id:21, title:"SCH-23314 - Delete Scheduled Shifts on Past-Dated Time Off Approval", skill:"feature", team:"SCH", module:"Past-Dated PTO Shift Delete", owner:"Eric Wang", scenarios:0, scenNew:0, scenExisting:0, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 29, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4857430057" },
-  { id:22, title:"SCH-20538 - Weekend Off Rotation", skill:"feature", team:"SCH", module:"Weekend Off Rotation", owner:"Mary Mao", scenarios:18, scenNew:18, scenExisting:0, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 15, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4824662028" },
-  { id:23, title:"GENAI-2520 - Forecast Audit & Repair", skill:"feature", team:"GENAI", module:"Forecast Audit & Repair", owner:"Nora Li", scenarios:26, scenNew:26, scenExisting:0, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 08, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4807720961" },
-  { id:24, title:"GENAI-2519 - Deep Labor Analysis", skill:"feature", team:"GENAI", module:"Deep Labor Analysis", owner:"Nora Li", scenarios:0, scenNew:0, scenExisting:0, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 05, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4799561729" },
-  { id:25, title:"TA-23120 -- InstantPay Nudge Manager", skill:"feature", team:"TA", module:"InstantPay Nudge Manager", owner:"Prateek Bhatia", scenarios:29, scenNew:29, scenExisting:0, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 11, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4806705179" },
-  { id:26, title:"TA-20710 -- Configurable idle time for LTC", skill:"feature", team:"TA", module:"LTC Configurable Timeouts", owner:"Prateek Bhatia", scenarios:21, scenNew:21, scenExisting:0, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 15, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4825088010" },
-  { id:27, title:"LP-1375 -- InstantPay Configurable Pay Types", skill:"feature", team:"LP", module:"InstantPay Pay Types", owner:"Ting Zou", scenarios:53, scenNew:53, scenExisting:0, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 08, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4806148110" },
-  { id:28, title:"OPS-10911 - Pagination Support for Labor Model", skill:"feature", team:"OPS", module:"Labor Model Pagination", owner:"Fiona Feng", scenarios:13, scenNew:13, scenExisting:0, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 29, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4799954945" },
-  { id:29, title:"ELM-6932 -- Localize Employee Search", skill:"feature", team:"ELM", module:"Localize Employee Search", owner:"Priya Singh", scenarios:27, scenNew:27, scenExisting:0, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 30, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4860706829" },
-  // /qa-regression
-  { id:30, title:"SCH-23741 - Open Shift Auto-Offer Diversification", skill:"regression", team:"SCH", module:"Open Shifts", owner:"Mary Mao", scenarios:0, scenNew:0, scenExisting:0, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 15, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4824399924" },
-  // /qa-delta
-  { id:31, title:"LP-2083 - Paid Time Off in InstantPay", skill:"delta", team:"LP", module:"InstantPay PTO", owner:"Divya Joshi", scenarios:0, scenNew:0, scenExisting:0, prCreated:"No", prNum:"--", prStatus:"--", lastModified:"Jun 03, 2026", confluence:"https://legiontech.atlassian.net/wiki/spaces/TEST/pages/4795006980" },
-];
+const REPO = 'legionco/qa-test-plan';
+const API_BASE = 'https://api.github.com';
+let DATA = [];
 
+// --- Token management ---
+function getToken() { return localStorage.getItem('gh_token_qa_report') || ''; }
+function toggleToken() { document.getElementById('tokenPanel').classList.toggle('visible'); document.getElementById('tokenInput').value = getToken(); }
+function saveToken() {
+  const t = document.getElementById('tokenInput').value.trim();
+  if (t) { localStorage.setItem('gh_token_qa_report', t); } else { localStorage.removeItem('gh_token_qa_report'); }
+  document.getElementById('tokenPanel').classList.remove('visible');
+  loadData();
+}
+function clearToken() { localStorage.removeItem('gh_token_qa_report'); document.getElementById('tokenInput').value = ''; }
+
+// --- Author mapping ---
+const AUTHOR_MAP = {
+  psinghlegion: 'Priya Singh',
+  'GunjanAnand-Legion': 'Gunjan Anand',
+  'mmao-legion': 'Mary Mao',
+  'vthorat-legion': 'Vikas Thorat',
+  'pbhatia-legion': 'Prateek Bhatia',
+  'SZhang-Legion': 'Stoneman Zhang',
+  'ewang-legion': 'Eric Wang',
+  Fiona168: 'Fiona Feng',
+  jbanzah: 'Jeff Banzah',
+  'vsrivastava-legion': 'Vikas Srivastava',
+  'skumark-legion': 'Santhosh Kumar K',
+};
+const TICKET_TO_TEAM = { SCH:'SCH', ELM:'ELM', TA:'TA', PLT:'PLT-Core', GENAI:'GENAI', LP:'LP', OPS:'OPS' };
+
+// --- PR body parsing ---
+function parseBody(body) {
+  const meta = {};
+  if (!body) return meta;
+  let m;
+
+  // Skill
+  m = body.match(/\*\*Type:\*\*\s*(feature|backlog|delta|regression)/i);
+  if (m) meta.skill = m[1].toLowerCase();
+
+  // Team
+  m = body.match(/\*\*Team:\*\*\s*([A-Za-z][\w-]*)/);
+  if (m) meta.team = m[1].trim();
+
+  // Module
+  m = body.match(/\*\*(?:Ticket\s*\/\s*Module|Ticket \/ Module):\*\*\s*(.+?)(?:\n|·|$)/);
+  if (m) {
+    let val = m[1].trim().replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+    if (!/^[A-Z]+-\d+$/.test(val.trim())) {
+      val = val.replace(/^[A-Z]+-\d+\s*[-\u2014\u2013]\s*/, '').trim();
+      if (val) meta.module = val;
+    }
+  }
+  if (!meta.module) {
+    m = body.match(/\*\*Module:\*\*\s*(.+?)(?:\n|·|$)/);
+    if (m) meta.module = m[1].trim();
+  }
+
+  // Scenarios
+  m = body.match(/\*\*Scenario[s]?\s*count:\*\*\s*(\d+)/i)
+    || body.match(/\*\*Scenarios:\*\*\s*(\d+)/i)
+    || body.match(/(\d+)\s+(?:tagged\s+)?(?:BDD\/)?(?:Gherkin\s+)?scenarios/i);
+  if (m) meta.scenarios = parseInt(m[1], 10);
+
+  // Confluence
+  m = body.match(/\*\*(?:Confluence\s*page|Source of record):\*\*\s*(https:\/\/legiontech\.atlassian\.net\/wiki\/\S+)/)
+    || body.match(/(?:Reviewed in Confluence|Confluence[:\s]+)\s*(https:\/\/legiontech\.atlassian\.net\/wiki\/\S+)/)
+    || body.match(/(https:\/\/legiontech\.atlassian\.net\/wiki\/spaces\/TEST\/pages\/\d+\S*)/);
+  if (m) meta.confluence = m[1].trim().replace(/\)$/, '');
+
+  return meta;
+}
+
+function moduleFromTitle(title) {
+  let m = title.match(/QA\s+Plan:\s*[A-Z]+-\d+\s*[-\u2014\u2013]\s*(.+)/);
+  if (m) return m[1].trim();
+  m = title.match(/(?:Backlog\s+)?Manifest:\s*(?:[A-Z]+\s*\/\s*)?(.+)/);
+  if (m) return m[1].trim();
+  m = title.match(/[-\u2014\u2013]\s*(.+)/);
+  if (m) return m[1].trim();
+  return title;
+}
+
+function teamFromTitle(title) {
+  let m = title.match(/(?:^|[\s:])([A-Z]+)-\d+/);
+  if (m) return TICKET_TO_TEAM[m[1]] || m[1];
+  m = title.match(/(?:Manifest|Plan):\s*([A-Z]+(?:-[A-Za-z]+)?)\s*\//);
+  if (m) return m[1];
+  return '';
+}
+
+function skillFromTitle(title) {
+  const t = title.toLowerCase();
+  if (t.includes('backlog') || t.includes('manifest')) return 'backlog';
+  if (t.includes('regression')) return 'regression';
+  if (t.includes('delta')) return 'delta';
+  return 'feature';
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  try { return new Date(iso).toLocaleDateString('en-US', { month:'short', day:'2-digit', year:'numeric' }); }
+  catch { return iso.slice(0,10); }
+}
+
+// --- Fetch from GitHub API with pagination ---
+async function fetchAllPRs() {
+  const token = getToken();
+  const headers = { Accept: 'application/vnd.github+json' };
+  if (token) headers.Authorization = 'Bearer ' + token;
+
+  let allPRs = [];
+  let page = 1;
+  while (true) {
+    const url = `${API_BASE}/repos/${REPO}/pulls?state=all&per_page=100&page=${page}`;
+    const resp = await fetch(url, { headers });
+    if (!resp.ok) {
+      if (resp.status === 401 || resp.status === 403) {
+        throw new Error('Authentication required. Click the gear icon to add a GitHub token with repo scope.');
+      }
+      if (resp.status === 404) {
+        throw new Error('Repository not found. If it is private, add a GitHub token with repo scope (gear icon).');
+      }
+      throw new Error(`GitHub API error: ${resp.status} ${resp.statusText}`);
+    }
+    const prs = await resp.json();
+    if (prs.length === 0) break;
+    allPRs = allPRs.concat(prs);
+    if (prs.length < 100) break;
+    page++;
+  }
+  return allPRs;
+}
+
+function parsePR(pr) {
+  const body = pr.body || '';
+  const meta = parseBody(body);
+
+  const login = pr.user?.login || '';
+  const authorName = AUTHOR_MAP[login] || pr.user?.name || login;
+
+  const skill = meta.skill || skillFromTitle(pr.title);
+  let team = meta.team || teamFromTitle(pr.title);
+  if (team === 'PLT') team = 'PLT-Core';
+
+  const module = meta.module || moduleFromTitle(pr.title);
+
+  const isMerged = pr.merged_at !== null && pr.merged_at !== undefined;
+  const dateStr = pr.merged_at || pr.updated_at || pr.created_at || '';
+
+  return {
+    id: pr.number,
+    title: pr.title,
+    skill,
+    team,
+    module,
+    owner: authorName,
+    scenarios: meta.scenarios || 0,
+    status: isMerged ? 'Merged' : 'Open',
+    lastModified: formatDate(dateStr),
+    confluence: meta.confluence || '',
+    url: pr.html_url,
+  };
+}
+
+// --- Load data ---
+async function loadData() {
+  const btn = document.getElementById('refreshBtn');
+  const label = document.getElementById('refreshLabel');
+  btn.disabled = true;
+  label.innerHTML = '<span class="spinner"></span>Loading...';
+  document.getElementById('loadingMsg').style.display = 'block';
+  document.getElementById('loadingMsg').textContent = 'Fetching PRs from GitHub...';
+  document.getElementById('dashboardContent').style.display = 'none';
+
+  let source = '';
+  try {
+    const token = getToken();
+    if (token) {
+      // If token is set, try GitHub API for live data
+      const prs = await fetchAllPRs();
+      const filtered = prs.filter(pr => pr.state === 'open' || (pr.state === 'closed' && pr.merged_at));
+      DATA = filtered.map(parsePR);
+      source = 'GitHub API (live)';
+    } else {
+      // No token — load from data.json directly (private repo needs auth)
+      const resp = await fetch('data.json?t=' + Date.now());
+      if (!resp.ok) throw new Error('data.json not found');
+      const json = await resp.json();
+      DATA = json.data;
+      source = 'data.json (generated ' + (json.generated || 'unknown') + ')';
+    }
+
+    DATA.sort((a, b) => b.id - a.id);
+
+    const now = new Date().toLocaleString('en-US', { dateStyle:'medium', timeStyle:'short' });
+    document.getElementById('refreshedAt').textContent = now + ' — ' + source;
+    document.getElementById('footerTimestamp').textContent = now;
+    document.getElementById('prCountInfo').textContent = DATA.length + ' PRs loaded via ' + source;
+
+    rebuildFilters();
+    document.getElementById('loadingMsg').style.display = 'none';
+    document.getElementById('dashboardContent').style.display = 'block';
+    render();
+  } catch (err) {
+    document.getElementById('loadingMsg').innerHTML =
+      '<div style="color:#dc2626;font-weight:600;">Failed to load data</div>' +
+      '<div style="margin-top:8px;color:var(--gray-500);">' + err.message + '</div>' +
+      '<div style="margin-top:16px;color:var(--gray-500);font-size:13px;">' +
+      '<strong>Option 1:</strong> Run <code>python3 fetch_prs.py</code> in this directory, then refresh.<br>' +
+      '<strong>Option 2:</strong> Click the gear icon and add a GitHub token with <code>repo</code> scope for live API access.</div>';
+  } finally {
+    btn.disabled = false;
+    label.textContent = 'Refresh';
+  }
+}
+
+function rebuildFilters() {
+  ['filterTeam','filterOwner'].forEach(id => {
+    const el = document.getElementById(id);
+    const current = el.value;
+    while (el.options.length > 1) el.remove(1);
+    const vals = id === 'filterTeam'
+      ? [...new Set(DATA.map(d => d.team).filter(Boolean))].sort()
+      : [...new Set(DATA.map(d => d.owner).filter(Boolean))].sort();
+    vals.forEach(v => { const o = document.createElement('option'); o.value = v; o.textContent = v; el.appendChild(o); });
+    if (vals.includes(current)) el.value = current;
+  });
+}
+
+// --- CSV export ---
 function exportTableToCSV(tbodyId, filename) {
   const table = document.getElementById(tbodyId).closest('table');
   const rows = [];
-  // Build header rows — handle colspan/rowspan for multi-row headers
   const headerRows = table.querySelectorAll('thead tr');
   if (headerRows.length === 1) {
     const headers = [];
     headerRows[0].querySelectorAll('th').forEach(th => headers.push('"' + th.textContent.trim().replace(/"/g, '""') + '"'));
     rows.push(headers.join(','));
   } else {
-    // Flatten multi-row headers into a single CSV header
     const thRows = Array.from(headerRows);
     const numCols = table.querySelector('tbody tr') ? table.querySelector('tbody tr').children.length : 0;
     const grid = Array.from({ length: thRows.length }, () => new Array(numCols).fill(''));
@@ -457,7 +692,6 @@ function exportTableToCSV(tbodyId, filename) {
         ci += cs;
       });
     });
-    // Merge: for each column, join unique consecutive cells from top to bottom
     const merged = [];
     for (let c = 0; c < numCols; c++) {
       const parts = [];
@@ -466,212 +700,192 @@ function exportTableToCSV(tbodyId, filename) {
     }
     rows.push(merged.join(','));
   }
-  // Data rows
   table.querySelectorAll('tbody tr').forEach(tr => {
     const cols = [];
-    tr.querySelectorAll('td').forEach(td => {
-      let text = td.textContent.trim().replace(/"/g, '""');
-      cols.push('"' + text + '"');
-    });
+    tr.querySelectorAll('td').forEach(td => cols.push('"' + td.textContent.trim().replace(/"/g, '""') + '"'));
     if (cols.length) rows.push(cols.join(','));
   });
   const csv = '\uFEFF' + rows.join('\r\n');
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  link.style.display = 'none';
-  document.body.appendChild(link);
-  link.click();
+  link.href = url; link.download = filename; link.style.display = 'none';
+  document.body.appendChild(link); link.click();
   setTimeout(() => { document.body.removeChild(link); URL.revokeObjectURL(url); }, 5000);
 }
 
+// --- Rendering ---
 const SKILL_LABELS = { feature:'/qa-feature', backlog:'/qa-backlog', delta:'/qa-delta', regression:'/qa-regression' };
 const SKILL_ORDER = ['feature','backlog','delta','regression'];
 const TEAM_COLORS = { ELM:'elm', SCH:'sch', TA:'ta', 'PLT-Core':'plt-core', 'PLT-Int':'plt-int', GENAI:'genai', LP:'lp', OPS:'ops' };
-const TEAMS_ALL = ['SCH','PLT-Core','TA','ELM','LP','PLT-Int','OPS','GENAI','EV-LIP','EPR','EV-COM','LRB','FOR'];
-
-// Populate dropdowns
-function populateSelect(id, vals) {
-  const el = document.getElementById(id);
-  vals.forEach(v => { const o = document.createElement('option'); o.value = v; o.textContent = v; el.appendChild(o); });
-}
-populateSelect('filterTeam', [...new Set(DATA.map(d => d.team))].sort());
-populateSelect('filterOwner', [...new Set(DATA.map(d => d.owner))].sort());
 
 function getFiltered() {
   const skill = document.getElementById('filterSkill').value;
   const team = document.getElementById('filterTeam').value;
   const owner = document.getElementById('filterOwner').value;
-  const pr = document.getElementById('filterPR').value;
-  const prStatus = document.getElementById('filterPRStatus').value;
+  const status = document.getElementById('filterStatus').value;
   return DATA.filter(d =>
     (skill === 'all' || d.skill === skill) &&
     (team === 'all' || d.team === team) &&
     (owner === 'all' || d.owner === owner) &&
-    (pr === 'all' || (pr === 'yes' ? d.prCreated === 'Yes' : d.prCreated === 'No')) &&
-    (prStatus === 'all' || (d.prStatus && d.prStatus.includes(prStatus)))
+    (status === 'all' || d.status === status)
   );
 }
 
 function render() {
   const f = getFiltered();
   const bySkill = {}; SKILL_ORDER.forEach(s => bySkill[s] = 0);
-  let totalScen = 0, prYes = 0, prNo = 0;
-  f.forEach(d => { bySkill[d.skill]++; totalScen += d.scenarios; d.prCreated === 'Yes' ? prYes++ : prNo++; });
+  let totalScen = 0, openCount = 0, mergedCount = 0;
+  f.forEach(d => { bySkill[d.skill] = (bySkill[d.skill]||0) + 1; totalScen += d.scenarios; d.status === 'Open' ? openCount++ : mergedCount++; });
 
   document.getElementById('totalPlans').textContent = f.length;
-  document.getElementById('totalSub').textContent = `from Confluence TEST space`;
-  document.getElementById('featureCount').textContent = bySkill.feature;
-  document.getElementById('backlogCount').textContent = bySkill.backlog;
-  document.getElementById('deltaCount').textContent = bySkill.delta;
-  document.getElementById('regressionCount').textContent = bySkill.regression;
+  document.getElementById('totalSub').textContent = 'from legionco/qa-test-plan';
+  document.getElementById('featureCount').textContent = bySkill.feature || 0;
+  document.getElementById('backlogCount').textContent = bySkill.backlog || 0;
+  document.getElementById('deltaCount').textContent = bySkill.delta || 0;
+  document.getElementById('regressionCount').textContent = bySkill.regression || 0;
   document.getElementById('scenarioCount').textContent = totalScen;
-  document.getElementById('scenarioSub').textContent = `${f.reduce((a,d)=>a+d.scenNew,0)} new + ${f.reduce((a,d)=>a+d.scenExisting,0)} existing`;
-  document.getElementById('prYesCount').textContent = prYes;
-  document.getElementById('prYesSub').textContent = `${f.length ? Math.round(prYes/f.length*100) : 0}% coverage`;
-  document.getElementById('prNoCount').textContent = prNo;
-  document.getElementById('prNoSub').textContent = `${f.length ? Math.round(prNo/f.length*100) : 0}% missing`;
+  document.getElementById('scenarioSub').textContent = 'across ' + f.length + ' PRs';
+  document.getElementById('openCount').textContent = openCount;
+  document.getElementById('openSub').textContent = (f.length ? Math.round(openCount/f.length*100) : 0) + '% of total';
+  document.getElementById('mergedCount').textContent = mergedCount;
+  document.getElementById('mergedSub').textContent = (f.length ? Math.round(mergedCount/f.length*100) : 0) + '% of total';
 
   // Skill chart
   const maxS = Math.max(...Object.values(bySkill), 1);
-  document.getElementById('skillChart').innerHTML = SKILL_ORDER.map(s => `
-    <div class="bar-row"><div class="bar-label">${SKILL_LABELS[s]}</div>
-    <div class="bar-track"><div class="bar-fill ${s}" style="width:${Math.max((bySkill[s]/maxS)*100, bySkill[s]>0?8:0)}%">${bySkill[s]}</div></div>
-    <div class="bar-value">${bySkill[s]}</div></div>`).join('');
+  document.getElementById('skillChart').innerHTML = SKILL_ORDER.map(s =>
+    '<div class="bar-row"><div class="bar-label">' + SKILL_LABELS[s] + '</div>' +
+    '<div class="bar-track"><div class="bar-fill ' + s + '" style="width:' + Math.max(((bySkill[s]||0)/maxS)*100, bySkill[s]>0?8:0) + '%">' + (bySkill[s]||0) + '</div></div>' +
+    '<div class="bar-value">' + (bySkill[s]||0) + '</div></div>'
+  ).join('');
 
   // Team chart
-  const byTeam = {}; f.forEach(d => byTeam[d.team] = (byTeam[d.team]||0)+1);
-  const tk = Object.keys(byTeam).sort((a,b)=>byTeam[b]-byTeam[a]);
-  const maxT = Math.max(...Object.values(byTeam),1);
-  document.getElementById('teamChart').innerHTML = tk.map(t => `
-    <div class="bar-row"><div class="bar-label">${t}</div>
-    <div class="bar-track"><div class="bar-fill ${TEAM_COLORS[t]||'elm'}" style="width:${Math.max((byTeam[t]/maxT)*100,8)}%">${byTeam[t]}</div></div>
-    <div class="bar-value">${byTeam[t]}</div></div>`).join('');
+  const byTeam = {}; f.forEach(d => { if(d.team) byTeam[d.team] = (byTeam[d.team]||0)+1; });
+  const tk = Object.keys(byTeam).sort((a,b) => byTeam[b]-byTeam[a]);
+  const maxT = Math.max(...Object.values(byTeam), 1);
+  document.getElementById('teamChart').innerHTML = tk.map(t =>
+    '<div class="bar-row"><div class="bar-label">' + t + '</div>' +
+    '<div class="bar-track"><div class="bar-fill ' + (TEAM_COLORS[t]||'elm') + '" style="width:' + Math.max((byTeam[t]/maxT)*100,8) + '%">' + byTeam[t] + '</div></div>' +
+    '<div class="bar-value">' + byTeam[t] + '</div></div>'
+  ).join('');
 
-  // PR donut
+  // Status donut
   const tot = f.length || 1;
-  const yPct = prYes/tot, nPct = prNo/tot;
+  const oPct = openCount/tot, mPct = mergedCount/tot;
   const r=50, cx=70, cy=70, c=2*Math.PI*r;
-  document.getElementById('prDonut').innerHTML = `
-    <svg class="donut-svg" viewBox="0 0 140 140">
-      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--gray-100)" stroke-width="20"/>
-      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#16a34a" stroke-width="20" stroke-dasharray="${yPct*c} ${c}" stroke-dashoffset="0" transform="rotate(-90 ${cx} ${cy})"/>
-      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#dc2626" stroke-width="20" stroke-dasharray="${nPct*c} ${c}" stroke-dashoffset="${-yPct*c}" transform="rotate(-90 ${cx} ${cy})"/>
-      <text x="${cx}" y="${cy}" text-anchor="middle" dy="0.35em" font-size="24" font-weight="700" fill="var(--gray-800)">${f.length}</text>
-    </svg>
-    <div class="donut-legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#16a34a"></div>PR Created: ${prYes} (${Math.round(yPct*100)}%)</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#dc2626"></div>No PR: ${prNo} (${Math.round(nPct*100)}%)</div>
-    </div>`;
+  document.getElementById('statusDonut').innerHTML =
+    '<svg class="donut-svg" viewBox="0 0 140 140">' +
+    '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="var(--gray-100)" stroke-width="20"/>' +
+    '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="#16a34a" stroke-width="20" stroke-dasharray="'+(oPct*c)+' '+c+'" stroke-dashoffset="0" transform="rotate(-90 '+cx+' '+cy+')"/>' +
+    '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="#8b5cf6" stroke-width="20" stroke-dasharray="'+(mPct*c)+' '+c+'" stroke-dashoffset="'+(-oPct*c)+'" transform="rotate(-90 '+cx+' '+cy+')"/>' +
+    '<text x="'+cx+'" y="'+cy+'" text-anchor="middle" dy="0.35em" font-size="24" font-weight="700" fill="var(--gray-800)">'+f.length+'</text>' +
+    '</svg>' +
+    '<div class="donut-legend">' +
+    '<div class="legend-item"><div class="legend-dot" style="background:#16a34a"></div>Open: '+openCount+' ('+Math.round(oPct*100)+'%)</div>' +
+    '<div class="legend-item"><div class="legend-dot" style="background:#8b5cf6"></div>Merged: '+mergedCount+' ('+Math.round(mPct*100)+'%)</div>' +
+    '</div>';
 
-  // Scenario by team chart
-  const scenByTeam = {}; f.forEach(d => { scenByTeam[d.team] = (scenByTeam[d.team]||0) + d.scenarios; });
-  const stk = Object.keys(scenByTeam).sort((a,b)=>scenByTeam[b]-scenByTeam[a]);
-  const maxSc = Math.max(...Object.values(scenByTeam),1);
-  document.getElementById('scenarioChart').innerHTML = stk.map(t => `
-    <div class="bar-row"><div class="bar-label">${t}</div>
-    <div class="bar-track"><div class="bar-fill ${TEAM_COLORS[t]||'elm'}" style="width:${(scenByTeam[t]/maxSc)*100}%">${scenByTeam[t]||''}</div></div>
-    <div class="bar-value">${scenByTeam[t]}</div></div>`).join('');
+  // Scenario by team
+  const scenByTeam = {}; f.forEach(d => { if(d.team) scenByTeam[d.team] = (scenByTeam[d.team]||0) + d.scenarios; });
+  const stk = Object.keys(scenByTeam).sort((a,b) => scenByTeam[b]-scenByTeam[a]);
+  const maxSc = Math.max(...Object.values(scenByTeam), 1);
+  document.getElementById('scenarioChart').innerHTML = stk.map(t =>
+    '<div class="bar-row"><div class="bar-label">' + t + '</div>' +
+    '<div class="bar-track"><div class="bar-fill ' + (TEAM_COLORS[t]||'elm') + '" style="width:' + (scenByTeam[t]/maxSc)*100 + '%">' + (scenByTeam[t]||'') + '</div></div>' +
+    '<div class="bar-value">' + scenByTeam[t] + '</div></div>'
+  ).join('');
 
-  // Team vs Skill Matrix (case-insensitive team matching)
+  // Team vs Skill Matrix
+  const allTeams = [...new Set(DATA.map(d => d.team).filter(Boolean))].sort();
   const matrix = {};
-  const teamKeyMap = {}; // lowercase -> display name
-  TEAMS_ALL.forEach(t => { const key = t.toLowerCase(); teamKeyMap[key] = t; matrix[key] = {}; SKILL_ORDER.forEach(s => { matrix[key][s] = { plans: 0, prYes: 0 }; }); });
+  allTeams.forEach(t => { matrix[t] = {}; SKILL_ORDER.forEach(s => { matrix[t][s] = { plans:0, open:0, merged:0 }; }); });
   f.forEach(d => {
-    const key = d.team.toLowerCase();
-    if (!matrix[key]) { matrix[key] = {}; SKILL_ORDER.forEach(s => { matrix[key][s] = { plans: 0, prYes: 0 }; }); teamKeyMap[key] = d.team; }
-    matrix[key][d.skill].plans++;
-    if (d.prCreated === 'Yes') matrix[key][d.skill].prYes++;
+    if (!d.team) return;
+    if (!matrix[d.team]) { matrix[d.team] = {}; SKILL_ORDER.forEach(s => { matrix[d.team][s] = { plans:0, open:0, merged:0 }; }); }
+    matrix[d.team][d.skill].plans++;
+    d.status === 'Open' ? matrix[d.team][d.skill].open++ : matrix[d.team][d.skill].merged++;
   });
-  const seenKeys = new Set(TEAMS_ALL.map(t => t.toLowerCase()));
-  const extraKeys = [...new Set(f.map(d => d.team.toLowerCase()))].filter(k => !seenKeys.has(k)).sort();
-  const matrixKeys = TEAMS_ALL.map(t => t.toLowerCase()).concat(extraKeys);
-  const totals = {}; SKILL_ORDER.forEach(s => { totals[s] = { plans: 0, prYes: 0 }; });
-  function prLabel(cell) {
-    if (cell.plans === 0) return '<span class="pr-cell-na">NA</span>';
-    if (cell.prYes === cell.plans) return '<span class="pr-cell-yes">Yes</span>';
-    if (cell.prYes === 0) return '<span class="pr-cell-no">No</span>';
-    return '<span class="pr-cell-partial">' + cell.prYes + '/' + cell.plans + '</span>';
+  const totals = {}; SKILL_ORDER.forEach(s => { totals[s] = { plans:0, open:0, merged:0 }; });
+  function statusLabel(cell) {
+    if (cell.plans === 0) return '<span class="pr-cell-na">--</span>';
+    const parts = [];
+    if (cell.open > 0) parts.push('<span class="pr-cell-open">' + cell.open + ' Open</span>');
+    if (cell.merged > 0) parts.push('<span class="pr-cell-merged">' + cell.merged + ' Merged</span>');
+    return parts.join(', ');
   }
-  let matrixHtml = matrixKeys.map(key => {
-    if (!matrix[key]) return '';
-    const displayName = teamKeyMap[key] || key;
-    let row = `<tr><td><span class="team-badge">${displayName}</span></td>`;
+  let matrixHtml = allTeams.map(team => {
+    if (!matrix[team]) return '';
+    let row = '<tr><td><span class="team-badge">' + team + '</span></td>';
     SKILL_ORDER.forEach(s => {
-      const c = matrix[key][s];
-      totals[s].plans += c.plans;
-      totals[s].prYes += c.prYes;
-      row += `<td>${c.plans}</td><td>${prLabel(c)}</td>`;
+      const cl = matrix[team][s];
+      totals[s].plans += cl.plans; totals[s].open += cl.open; totals[s].merged += cl.merged;
+      row += '<td>' + cl.plans + '</td><td>' + statusLabel(cl) + '</td>';
     });
     return row + '</tr>';
   }).join('');
   matrixHtml += '<tr><td><strong>Total</strong></td>';
-  SKILL_ORDER.forEach(s => { matrixHtml += `<td><strong>${totals[s].plans}</strong></td><td>${prLabel(totals[s])}</td>`; });
+  SKILL_ORDER.forEach(s => { matrixHtml += '<td><strong>' + totals[s].plans + '</strong></td><td>' + statusLabel(totals[s]) + '</td>'; });
   matrixHtml += '</tr>';
   document.getElementById('matrixTable').innerHTML = matrixHtml;
 
   // Skill table
   document.getElementById('skillTable').innerHTML = SKILL_ORDER.map(s => {
-    const p = f.filter(d=>d.skill===s); const sc = p.reduce((a,d)=>a+d.scenarios,0);
-    return `<tr><td><span class="skill-badge skill-${s}">${SKILL_LABELS[s]}</span></td><td>${p.length}</td><td>${f.length?Math.round(p.length/f.length*100):0}%</td><td>${sc||'--'}</td><td>${p.filter(d=>d.prCreated==='Yes').length}</td><td>${p.filter(d=>d.prCreated==='No').length}</td></tr>`;
+    const p = f.filter(d => d.skill===s); const sc = p.reduce((a,d) => a+d.scenarios, 0);
+    return '<tr><td><span class="skill-badge skill-'+s+'">'+SKILL_LABELS[s]+'</span></td><td>'+p.length+'</td><td>'+(f.length?Math.round(p.length/f.length*100):0)+'%</td><td>'+(sc||'--')+'</td><td>'+p.filter(d=>d.status==='Open').length+'</td><td>'+p.filter(d=>d.status==='Merged').length+'</td></tr>';
   }).join('');
 
   // Team table
-  const tb = {}; f.forEach(d => { if(!tb[d.team]) tb[d.team]={c:0,s:0,y:0,n:0}; tb[d.team].c++; tb[d.team].s+=d.scenarios; d.prCreated==='Yes'?tb[d.team].y++:tb[d.team].n++; });
+  const tb = {}; f.forEach(d => { if(!d.team) return; if(!tb[d.team]) tb[d.team]={c:0,s:0,o:0,m:0}; tb[d.team].c++; tb[d.team].s+=d.scenarios; d.status==='Open'?tb[d.team].o++:tb[d.team].m++; });
   document.getElementById('teamTable').innerHTML = Object.keys(tb).sort((a,b)=>tb[b].c-tb[a].c).map(t =>
-    `<tr><td><span class="team-badge">${t}</span></td><td>${tb[t].c}</td><td>${tb[t].s||'--'}</td><td>${tb[t].y}</td><td>${tb[t].n}</td></tr>`
+    '<tr><td><span class="team-badge">'+t+'</span></td><td>'+tb[t].c+'</td><td>'+(tb[t].s||'--')+'</td><td>'+tb[t].o+'</td><td>'+tb[t].m+'</td></tr>'
   ).join('');
 
   // Owner table
-  const ob = {}; f.forEach(d => { if(!ob[d.owner]) ob[d.owner]={c:0,s:0,y:0,n:0,teams:new Set()}; ob[d.owner].c++; ob[d.owner].s+=d.scenarios; ob[d.owner].teams.add(d.team); d.prCreated==='Yes'?ob[d.owner].y++:ob[d.owner].n++; });
+  const ob = {}; f.forEach(d => { if(!ob[d.owner]) ob[d.owner]={c:0,s:0,o:0,m:0,teams:new Set()}; ob[d.owner].c++; ob[d.owner].s+=d.scenarios; if(d.team) ob[d.owner].teams.add(d.team); d.status==='Open'?ob[d.owner].o++:ob[d.owner].m++; });
   document.getElementById('ownerTable').innerHTML = Object.keys(ob).sort((a,b)=>ob[b].c-ob[a].c).map(o =>
-    `<tr><td><strong>${o}</strong></td><td>${ob[o].c}</td><td>${[...ob[o].teams].sort().map(t=>'<span class="team-badge">'+t+'</span>').join(' ')}</td><td>${ob[o].s||'--'}</td><td>${ob[o].y}</td><td>${ob[o].n}</td></tr>`
+    '<tr><td><strong>'+o+'</strong></td><td>'+ob[o].c+'</td><td>'+[...ob[o].teams].sort().map(t=>'<span class="team-badge">'+t+'</span>').join(' ')+'</td><td>'+(ob[o].s||'--')+'</td><td>'+ob[o].o+'</td><td>'+ob[o].m+'</td></tr>'
   ).join('');
 
-  // PR Coverage table
-  document.getElementById('prCoverageTable').innerHTML = SKILL_ORDER.map(s => {
-    const p = f.filter(d=>d.skill===s); const y = p.filter(d=>d.prCreated==='Yes').length; const n = p.filter(d=>d.prCreated==='No').length;
-    return `<tr><td><span class="skill-badge skill-${s}">${SKILL_LABELS[s]}</span></td><td>${p.length}</td><td>${y}</td><td>${n}</td><td>${p.length?Math.round(y/p.length*100):0}%</td></tr>`;
-  }).join('') + (() => { const y=f.filter(d=>d.prCreated==='Yes').length; const n=f.filter(d=>d.prCreated==='No').length; return `<tr style="font-weight:700;background:var(--gray-50)"><td>Total</td><td>${f.length}</td><td>${y}</td><td>${n}</td><td>${f.length?Math.round(y/f.length*100):0}%</td></tr>`; })();
+  // Status summary
+  document.getElementById('statusTable').innerHTML = SKILL_ORDER.map(s => {
+    const p = f.filter(d=>d.skill===s); const o = p.filter(d=>d.status==='Open').length; const m = p.filter(d=>d.status==='Merged').length;
+    return '<tr><td><span class="skill-badge skill-'+s+'">'+SKILL_LABELS[s]+'</span></td><td>'+p.length+'</td><td>'+o+'</td><td>'+m+'</td><td>'+(p.length?Math.round(m/p.length*100):0)+'%</td></tr>';
+  }).join('') + (function(){ const o=f.filter(d=>d.status==='Open').length; const m=f.filter(d=>d.status==='Merged').length; return '<tr style="font-weight:700;background:var(--gray-50)"><td>Total</td><td>'+f.length+'</td><td>'+o+'</td><td>'+m+'</td><td>'+(f.length?Math.round(m/f.length*100):0)+'%</td></tr>'; })();
 
   // Main table
   const mt = document.getElementById('mainTable');
   const nd = document.getElementById('noData');
-  if(f.length===0){ mt.innerHTML=''; nd.style.display='block'; } else {
+  if (f.length === 0) { mt.innerHTML=''; nd.style.display='block'; } else {
     nd.style.display='none';
-    mt.innerHTML = f.map(d => `<tr>
-      <td>${d.id}</td>
-      <td>${d.title}</td>
-      <td><span class="skill-badge skill-${d.skill}">${SKILL_LABELS[d.skill]}</span></td>
-      <td><span class="team-badge">${d.team}</span></td>
-      <td>${d.module}</td>
-      <td>${d.owner}</td>
-      <td>${d.scenarios||'--'}</td>
-      <td><span class="${d.prCreated==='Yes'?'pr-yes-badge':'pr-no-badge'}">${d.prCreated}</span></td>
-      <td>${d.prCreated==='Yes'?'<a class="pr-link" href="https://github.com/legionco/qa-test-plan/pull/'+d.prNum.replace(/[^0-9]/g,'')+'" target="_blank">'+d.prNum+'</a>':'--'}</td>
-      <td>${d.prStatus!=='--'?'<span class="status-badge status-'+d.prStatus.split(' ')[0].toLowerCase().replace('#1','')+'">'+d.prStatus+'</span>':'--'}</td>
-      <td>${d.lastModified}</td>
-      <td><a class="confluence-link" href="${d.confluence}" target="_blank">View</a></td>
-    </tr>`).join('');
+    mt.innerHTML = f.map(d =>
+      '<tr>' +
+      '<td><a class="pr-link" href="'+d.url+'" target="_blank">#'+d.id+'</a></td>' +
+      '<td>'+d.title+'</td>' +
+      '<td><span class="skill-badge skill-'+d.skill+'">'+(SKILL_LABELS[d.skill]||d.skill)+'</span></td>' +
+      '<td>'+(d.team ? '<span class="team-badge">'+d.team+'</span>' : '--')+'</td>' +
+      '<td>'+d.module+'</td>' +
+      '<td>'+d.owner+'</td>' +
+      '<td>'+(d.scenarios||'--')+'</td>' +
+      '<td><span class="status-badge status-'+d.status.toLowerCase()+'">'+d.status+'</span></td>' +
+      '<td>'+d.lastModified+'</td>' +
+      '<td>'+(d.confluence ? '<a class="confluence-link" href="'+d.confluence+'" target="_blank">Confluence</a>' : '--')+'</td>' +
+      '</tr>'
+    ).join('');
   }
-  document.getElementById('filteredCount').textContent = `${f.length} of ${DATA.length} plans`;
+  document.getElementById('filteredCount').textContent = f.length + ' of ' + DATA.length + ' PRs';
 }
 
-['filterSkill','filterTeam','filterOwner','filterPR','filterPRStatus'].forEach(id =>
+['filterSkill','filterTeam','filterOwner','filterStatus'].forEach(id =>
   document.getElementById(id).addEventListener('change', render));
 
 function resetFilters() {
-  ['filterSkill','filterTeam','filterOwner','filterPR','filterPRStatus'].forEach(id =>
+  ['filterSkill','filterTeam','filterOwner','filterStatus'].forEach(id =>
     document.getElementById(id).value = 'all');
   render();
 }
 
-const now = new Date().toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'});
-document.getElementById('timestamp').textContent = now;
-document.getElementById('footerTimestamp').textContent = now;
-render();
+// Auto-load on page open
+loadData();
 </script>
 </body>
 </html>
