@@ -503,7 +503,13 @@ function parseBody(body) {
   m = body.match(/\*\*(?:Confluence\s*page|Source of record):\*\*\s*(https:\/\/legiontech\.atlassian\.net\/wiki\/\S+)/)
     || body.match(/(?:Reviewed in Confluence|Confluence[:\s]+)\s*(https:\/\/legiontech\.atlassian\.net\/wiki\/\S+)/)
     || body.match(/(https:\/\/legiontech\.atlassian\.net\/wiki\/spaces\/TEST\/pages\/\d+\S*)/);
-  if (m) meta.confluence = m[1].trim().replace(/\)$/, '');
+  if (m) {
+    meta.confluence = m[1].trim().replace(/\)$/, '');
+  } else {
+    // Bare page ID: "Confluence page 4880629795"
+    m = body.match(/Confluence\s+page\s+(\d{10,})/i);
+    if (m) meta.confluence = 'https://legiontech.atlassian.net/wiki/spaces/TEST/pages/' + m[1];
+  }
 
   return meta;
 }

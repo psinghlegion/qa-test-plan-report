@@ -90,6 +90,11 @@ def parse_body(body):
         m = re.search(r"(https://legiontech\.atlassian\.net/wiki/spaces/TEST/pages/\d+\S*)", body)
     if m:
         meta["confluence"] = m.group(1).strip().rstrip(")")
+    else:
+        # Bare page ID: "Confluence page 4880629795"
+        m = re.search(r"Confluence\s+page\s+(\d{10,})", body, re.I)
+        if m:
+            meta["confluence"] = "https://legiontech.atlassian.net/wiki/spaces/TEST/pages/" + m.group(1)
 
     return meta
 
@@ -147,6 +152,24 @@ def format_date(iso_str):
         return iso_str[:10]
 
 
+def find_confluence_in_diff(pr_number):
+    """Fetch PR diff and look for Confluence references in file content."""
+    cmd = ["gh", "pr", "diff", str(pr_number), "--repo", REPO]
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    if result.returncode != 0:
+        return ""
+    diff = result.stdout
+    # Full URL
+    m = re.search(r"(https://legiontech\.atlassian\.net/wiki/spaces/TEST/pages/\d+)", diff)
+    if m:
+        return m.group(1)
+    # Bare page ID
+    m = re.search(r"Confluence\s+page\s+(\d{10,})", diff, re.I)
+    if m:
+        return "https://legiontech.atlassian.net/wiki/spaces/TEST/pages/" + m.group(1)
+    return ""
+
+
 def main():
     cmd = [
         "gh", "pr", "list",
@@ -170,6 +193,12 @@ def main():
     for pr in prs:
         body = pr.get("body") or ""
         meta = parse_body(body)
+
+        # If no Confluence link found in body, scan the PR diff
+        if not meta.get("confluence"):
+            confluence = find_confluence_in_diff(pr["number"])
+            if confluence:
+                meta["confluence"] = confluence
 
         # Author
         login = pr["author"]["login"]
