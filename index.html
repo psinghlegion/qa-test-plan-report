@@ -190,6 +190,28 @@
     .export-btn svg { width: 14px; height: 14px; }
     .timestamp { text-align: center; padding: 16px; color: var(--gray-400); font-size: 12px; }
     .loading { text-align: center; padding: 60px; color: var(--gray-400); font-size: 16px; }
+    .token-gate {
+      display: flex; align-items: center; justify-content: center; min-height: 100vh;
+      background: linear-gradient(135deg, #1e3a5f 0%, #1a56db 100%);
+    }
+    .token-gate-box {
+      background: white; border-radius: 12px; padding: 40px 48px; box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+      max-width: 480px; width: 100%; text-align: center;
+    }
+    .token-gate-box h2 { font-size: 20px; color: var(--gray-800); margin-bottom: 6px; }
+    .token-gate-box .tg-subtitle { font-size: 14px; color: var(--gray-500); margin-bottom: 24px; }
+    .token-gate-box input {
+      width: 100%; padding: 10px 14px; border: 1px solid var(--gray-300); border-radius: 6px;
+      font-size: 14px; font-family: monospace; margin-bottom: 12px; outline: none; transition: border-color 0.15s;
+    }
+    .token-gate-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,86,219,0.1); }
+    .token-gate-box .tg-btn {
+      width: 100%; padding: 10px; background: var(--primary); color: white; border: none;
+      border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s;
+    }
+    .token-gate-box .tg-btn:hover { background: #1544b5; }
+    .token-gate-box .tg-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .token-gate-box .tg-hint { font-size: 12px; color: var(--gray-400); margin-top: 16px; line-height: 1.6; }
     .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 6px; }
     @keyframes spin { to { transform: rotate(360deg); } }
     @media (max-width: 768px) {
@@ -202,6 +224,18 @@
 </head>
 <body>
 
+<!-- Token Gate -->
+<div class="token-gate" id="tokenGate" style="display:none;">
+  <div class="token-gate-box">
+    <h2>QA Test Plan Report</h2>
+    <div class="tg-subtitle">Enter your GitHub token to access the dashboard</div>
+    <input type="password" id="gateTokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" onkeydown="if(event.key==='Enter')submitGateToken()" />
+    <button class="tg-btn" id="gateSubmitBtn" onclick="submitGateToken()">Continue</button>
+    <div class="tg-hint">Token needs <code>repo</code> scope for private repos.<br>Stored in your browser's localStorage only.</div>
+  </div>
+</div>
+
+<div id="appShell" style="display:none;">
 <div class="header">
   <div class="header-top">
     <div>
@@ -432,6 +466,7 @@
 
   </div><!-- /dashboardContent -->
 </div>
+</div><!-- /appShell -->
 
 <script>
 const REPO = 'legionco/qa-test-plan';
@@ -890,8 +925,23 @@ function resetFilters() {
   render();
 }
 
-// Auto-load on page open
-loadData();
+// --- Token gate ---
+function submitGateToken() {
+  const t = document.getElementById('gateTokenInput').value.trim();
+  if (!t) return;
+  localStorage.setItem('gh_token_qa_report', t);
+  document.getElementById('tokenGate').style.display = 'none';
+  document.getElementById('appShell').style.display = 'block';
+  loadData();
+}
+
+// Always show token gate on page load; pre-fill if previously saved
+(function init() {
+  const saved = getToken();
+  if (saved) document.getElementById('gateTokenInput').value = saved;
+  document.getElementById('tokenGate').style.display = 'flex';
+  document.getElementById('appShell').style.display = 'none';
+})();
 </script>
 </body>
 </html>
